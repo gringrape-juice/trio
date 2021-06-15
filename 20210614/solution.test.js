@@ -1,22 +1,6 @@
+/* eslint-disable no-param-reassign */
 test('test is working', () => {
   expect(1 + 1).toBe(2);
-});
-
-// ## 구하는 것
-// 터트려져 사라진 인형의 개수
-// ## 주어진 것
-// - 게임화면 격자 상태 - board
-// - 크레인을 작동시킨 위치 배열 - moves
-// ## 조건
-// 크레인을 작동시킨 위치 -> board 의 열 번호 +1
-// 게임화면 격자 크기 -> N*N 정사각형
-// 인형이 바구니(스택)에 담길 때  같은 모양의 인형이 두개가 연속되면 터뜨려진다.
-
-test('test is working', () => {
-  function solution(board, moves) {
-    const answer = 0;
-    return answer;
-  }~~expect(1 + 1).toBe(2);
 });
 
 function pick(board, move) {
@@ -25,6 +9,7 @@ function pick(board, move) {
   if (dollIndex < 0) {
     return null;
   }
+
   const doll = board[dollIndex][move - 1];
   board[dollIndex][move - 1] = 0;
   return doll;
@@ -108,24 +93,13 @@ test('if we put same doll then, bomb!', () => {
 
 function solution(board, moves) {
   const basket = [];
-  let count = 0;
-  moves.forEach((move) => {
-    const doll = pick(board, move);
 
-    if (!doll) {
-      return;
-    }
-
-    const popCount = put(basket, doll);
-    count += popCount;
-  });
-
-  return count;
+  return moves
+    .map((move) => pick(board, move))
+    .filter((doll) => doll)
+    .map((doll) => put(basket, doll))
+    .reduce((totalCount, popCount) => totalCount + popCount, 0);
 }
-
-// 2
-// 2
-// 1
 
 test('solution', () => {
   const board = [
