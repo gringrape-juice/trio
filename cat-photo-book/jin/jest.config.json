@@ -1,0 +1,8 @@
+{
+  "name": "my-project",
+  "jest": {
+    "verbose": true
+  },
+  "testEnvironment": "jsdom",
+  "setupFilesAfterEnv": ["./jest.setup.js"]
+}
