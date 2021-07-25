@@ -1,9 +1,12 @@
 export default class Nodes extends HTMLElement {
-  constructor({ nodes, currentPath, onClickFolder }) {
+  constructor({
+    nodes, currentPath, onClickFolder, onClickPrev,
+  }) {
     super();
     this.nodes = nodes;
     this.currentPath = currentPath;
     this.handleClickFolder = onClickFolder;
+    this.handleClickPrev = onClickPrev;
   }
 
   connectedCallback() {
@@ -12,7 +15,7 @@ export default class Nodes extends HTMLElement {
 
   render() {
     const prevButton = `
-      <div class="Node">
+      <div class="Node" type="PREV">
         <img src="./assets/prev.png" alt="prev">
       </div>
     `;
@@ -31,6 +34,10 @@ export default class Nodes extends HTMLElement {
     this.addEventListener('click', ({ target }) => {
       const { parentNode: currentNode } = target;
       const [type, name] = ['type', 'name'].map((value) => currentNode.getAttribute(value));
+
+      if (type === 'PREV') {
+        this.handleClickPrev();
+      }
 
       if (type === 'DIRECTORY') {
         this.handleClickFolder(name);

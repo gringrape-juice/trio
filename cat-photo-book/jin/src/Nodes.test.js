@@ -1,7 +1,6 @@
 import {
   fireEvent,
   getByAltText,
-  queryByAltText,
 } from '@testing-library/dom';
 
 import root from '../assets/api/root.js';
@@ -12,13 +11,14 @@ describe('Nodes', () => {
   const { body } = document;
 
   const handleClickFolder = jest.fn();
+  const handleClickPrev = jest.fn();
 
-  function renderNodes() {
-    const currentPath = 'root';
+  function renderNodes({ currentPath } = {}) {
     const nodes = new Nodes({
       nodes: root,
       currentPath,
       onClickFolder: handleClickFolder,
+      onClickPrev: handleClickPrev,
     });
     body.appendChild(nodes);
 
@@ -26,6 +26,8 @@ describe('Nodes', () => {
   }
 
   beforeEach(() => {
+    handleClickFolder.mockClear();
+
     const { childNodes } = document.body;
 
     childNodes.forEach((child) => {
@@ -42,30 +44,19 @@ describe('Nodes', () => {
 
   context('when click folder', () => {
     it('renders its files and folders', () => {
-      const Nodes = renderNodes();
+      const nodes = renderNodes();
 
-      fireEvent.click(getByAltText(Nodes, '노란고양이'));
+      fireEvent.click(getByAltText(nodes, '노란고양이'));
 
       expect(handleClickFolder).toBeCalled();
     });
   });
+
+  it('listens "prev" button click event', () => {
+    const nodes = renderNodes({ currentPath: 'not-root' });
+
+    fireEvent.click(getByAltText(nodes, 'prev'));
+
+    expect(handleClickPrev).toBeCalled();
+  });
 });
-
-//   it('changes directory path', () => {
-//     const Nodes = renderNodes();
-
-//     fireEvent.click(getByAltText(Nodes, '노란고양이'));
-//     const nav = Nodes.querySelector('.Breadcrumb');
-
-//     expect(nav).toHaveTextContent('root - 노란고양이');
-//   });
-// });
-
-// context('when current path is root', () => {
-//   it('does not render prev ', () => {
-//     const Nodes = renderNodes();
-
-//     expect(queryByAltText(Nodes, 'prev')).toBeNull();
-//   });
-// });
-// });

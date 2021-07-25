@@ -64,4 +64,17 @@ describe('App', () => {
       expect(queryByAltText(app, 'prev')).toBeNull();
     });
   });
+
+  context('when click prev', () => {
+    it('changes history', () => {
+      const app = renderApp();
+      const nav = () => app.querySelector('.Breadcrumb');
+
+      fireEvent.click(getByAltText(app, '노란고양이'));
+      expect(nav()).toHaveTextContent('root - 노란고양이');
+
+      fireEvent.click(getByAltText(app, 'prev'));
+      expect(nav()).not.toHaveTextContent('노란고양이');
+    });
+  });
 });
